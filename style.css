@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* .our-impact-cards div:hover{
-background: #8affb7;
-transform: translate();
-} */
+.active{
+    background: #15803D;
+    color: white;
+}
