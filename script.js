@@ -71,46 +71,45 @@ const displayTrees = (trees) => {
 
         // /////////////////
         let allCart = [];
-        console.log(allCart);
-
 
         let getAddCardBtn = document.getElementsByClassName('add-cart-btn');
-        // console.log(getAddCardBtn);
 
         for (let btn of getAddCardBtn) {
-
-            // console.log("Button clicked:", btn);
-
             btn.addEventListener('click', function () {
                 const getPlantName = btn.parentNode.children[1].innerText;
                 const getPlantPrice = btn.parentNode.children[3].children[1].children[0].innerText;
+
+
                 allCart.push({
                     name: getPlantName,
-                    price: getPlantPrice
-                })
-
-                // console.log(allCart);
+                    price: parseFloat(getPlantPrice)
+                });
 
                 const cartContainer = document.getElementById('cart-container');
-                cartContainer.innerHTML = ''
+                cartContainer.innerHTML = '';
+
+                let total = 0;
 
                 allCart.forEach(cart => {
+                    total += cart.price;
 
-                    const cartItem = document.createElement('div')
+                    const cartItem = document.createElement('div');
                     cartItem.innerHTML = `
-                           <div
-                         class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
-                             <div>
-                                   <p class="font-medium text-[15px] mb-1">${cart.name}</p>
-                                   <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
-                                </div>
-                                <div><img id="delete-cart" src="assets/Vector.png" class="cursor-pointer" alt=""></div>
-                           </div>
-
-                   `;
+                <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
+                    <div>
+                        <p class="font-medium text-[15px] mb-1">${cart.name}</p>
+                        <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
+                    </div>
+                    <div>
+                        <img id="delete-cart" src="assets/Vector.png" class="cursor-pointer" alt="">
+                    </div>
+                </div>
+            `;
                     cartContainer.appendChild(cartItem);
-                })
-            })
+                });
+
+                document.getElementById('total-price').innerText = total;
+            });
         }
 
         // //////////////////////////////////
@@ -151,9 +150,7 @@ const displayCategories = (categories) => {
 
        `;
 
-
         allCategories.append(oneCategory);
-
 
     });
 
@@ -210,6 +207,56 @@ const displayCategoryTrees = (plants) => {
 `;
 
         treesContainer.append(categoryTrees)
+
+        // /////////////////
+        let allCart = [];
+
+        let getAddCardBtn = document.getElementsByClassName('add-cart-btn');
+
+        for (let btn of getAddCardBtn) {
+            // console.log(btn);
+
+            btn.addEventListener('click', function () {
+                // console.log(btn);
+
+                const getPlantName = btn.parentNode.children[1].innerText;
+                const getPlantPrice = btn.parentNode.children[3].children[1].children[0].innerText;
+                console.log(getPlantName, getPlantPrice);
+
+
+                allCart.push({
+                    name: getPlantName,
+                    price: parseFloat(getPlantPrice)
+                });
+
+                const cartContainer = document.getElementById('cart-container');
+                cartContainer.innerHTML = '';
+
+                let total = 0;
+
+                allCart.forEach(cart => {
+                    total += cart.price;
+
+                    const cartItem = document.createElement('div');
+                    cartItem.innerHTML = `
+                <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
+                    <div>
+                        <p class="font-medium text-[15px] mb-1">${cart.name}</p>
+                        <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
+                    </div>
+                    <div>
+                        <img id="delete-cart" src="assets/Vector.png" class="cursor-pointer" alt="">
+                    </div>
+                </div>
+            `;
+                    cartContainer.appendChild(cartItem);
+                });
+
+                document.getElementById('total-price').innerText = total;
+            });
+        }
+
+        // //////////////////////////////////
 
 
     });
