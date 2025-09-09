@@ -43,82 +43,108 @@ const displayPlantDetails = (plant) => {
 
 }
 
+let allCart = [];
 const displayTrees = (trees) => {
 
     const treesContainer = document.getElementById('trees-container');
+    treesContainer.innerHTML = '';
 
     trees.forEach(tree => {
-
-        const treesCard = document.createElement('div')
+        const treesCard = document.createElement('div');
         treesCard.innerHTML = `
-                    <div class="shadow-lg h-[450px] bg-white rounded-lg p-2">
-                       <div>
-                         <img class="w-full h-[190px] bg-[#EDEDED] rounded-lg" src="${tree.image}" alt="">
-                       </div>
-                        <h2  onclick="loadPlantDetail(${tree.id})" class="font-bold my-1.5">${tree.name}</h2>
-                        <div class="h-[110px]"><p class="text-[14px] mb-1.5">${tree.description}</p></div>
-                        <div class="flex justify-between">
-                           <button class="btn rounded-full bg-[#dcfce7] text-[#15803d]"> <p>${tree.category}</p></button>
-                            <p class="font-semibold">৳<span>${tree.price}</span></p>                            
-                        </div>
-                         <button
-                        class="add-cart-btn w-full btn btn-neutral mt-2 text-white rounded-full bg-[#15803D] border-0 hover:bg-[#53a548]">Add to Cart</button>
-                    </div>
-        `;
-        treesContainer.append(treesCard)
-
-
-
-        // /////////////////
-        let allCart = [];
-
-        let getAddCardBtn = document.getElementsByClassName('add-cart-btn');
-
-        for (let btn of getAddCardBtn) {
-            btn.addEventListener('click', function () {
-                const getPlantName = btn.parentNode.children[1].innerText;
-                const getPlantPrice = btn.parentNode.children[3].children[1].children[0].innerText;
-
-
-                allCart.push({
-                    name: getPlantName,
-                    price: parseFloat(getPlantPrice)
-                });
-
-                const cartContainer = document.getElementById('cart-container');
-                cartContainer.innerHTML = '';
-
-                let total = 0;
-
-                allCart.forEach(cart => {
-                    total += cart.price;
-
-                    const cartItem = document.createElement('div');
-                    cartItem.innerHTML = `
-                <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
-                    <div>
-                        <p class="font-medium text-[15px] mb-1">${cart.name}</p>
-                        <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
-                    </div>
-                    <div>
-                        <img id="delete-cart" src="assets/Vector.png" class="cursor-pointer" alt="">
-                    </div>
+            <div class="shadow-lg h-[450px] bg-white rounded-lg p-2">
+                <div>
+                    <img class="w-full h-[190px] bg-[#EDEDED] rounded-lg" src="${tree.image}" alt="">
                 </div>
-            `;
-                    cartContainer.appendChild(cartItem);
-                });
-
-                document.getElementById('total-price').innerText = total;
-            });
-        }
-
-        // //////////////////////////////////
-
-
-
+                <h2 onclick="loadPlantDetail(${tree.id})" class="font-bold my-1.5">${tree.name}</h2>
+                <div class="h-[110px]"><p class="text-[14px] mb-1.5">${tree.description}</p></div>
+                <div class="flex justify-between">
+                    <button class="btn rounded-full bg-[#dcfce7] text-[#15803d]">
+                        <p>${tree.category}</p>
+                    </button>
+                    <p class="font-semibold">৳<span>${tree.price}</span></p>                            
+                </div>
+                <button class="add-cart-btn w-full btn btn-neutral mt-2 text-white rounded-full bg-[#15803D] border-0 hover:bg-[#53a548]">
+                    Add to Cart
+                </button>
+            </div>
+        `;
+        treesContainer.append(treesCard);
     });
 
-}
+    const getAddCardBtn = document.getElementsByClassName('add-cart-btn');
+    for (let btn of getAddCardBtn) {
+        btn.addEventListener('click', function () {
+            const getPlantName = btn.parentNode.children[1].innerText;
+            const getPlantPrice = btn.parentNode.children[3].children[1].children[0].innerText;
+
+            allCart.push({
+                name: getPlantName,
+                price: parseFloat(getPlantPrice)
+            });
+
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.innerHTML = '';
+
+            let total = 0;
+
+            allCart.forEach(cart => {
+                total += cart.price;
+
+                const cartItem = document.createElement('div');
+                cartItem.innerHTML = `
+                    <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
+                        <div>
+                            <p class="font-medium text-[15px] mb-1">${cart.name}</p>
+                            <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
+                        </div>
+                        <div>
+                            <img src="assets/Vector.png" class="delete-btn cursor-pointer" alt="">
+                        </div>
+                    </div>
+                `;
+                cartContainer.appendChild(cartItem);
+            });
+
+            document.getElementById('total-price').innerText = total;
+        });
+    }
+
+    document.getElementById('cart-container').addEventListener('click', function (e) {
+        if (e.target.classList.contains('delete-btn')) {
+            const buttons = document.getElementsByClassName('delete-btn');
+            const index = Array.from(buttons).indexOf(e.target);
+
+            allCart.splice(index, 1);
+
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.innerHTML = '';
+
+            let total = 0;
+            allCart.forEach(cart => {
+                total += cart.price;
+
+                const cartItem = document.createElement('div');
+                cartItem.innerHTML = `
+                    <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
+                        <div>
+                            <p class="font-medium text-[15px] mb-1">${cart.name}</p>
+                            <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
+                        </div>
+                        <div>
+                            <img src="assets/Vector.png" class="delete-btn cursor-pointer" alt="">
+                        </div>
+                    </div>
+                `;
+                cartContainer.appendChild(cartItem);
+            });
+
+            document.getElementById('total-price').innerText = total;
+        }
+    });
+
+};
+
 
 
 
@@ -182,89 +208,87 @@ const loadCategoryTrees = (id) => {
 
 
 
+
 const displayCategoryTrees = (plants) => {
     const treesContainer = document.getElementById('trees-container');
     treesContainer.innerHTML = '';
 
     plants.forEach(plant => {
-
-        const categoryTrees = document.createElement('div')
+        const categoryTrees = document.createElement('div');
         categoryTrees.innerHTML = `
-
-        <div class="shadow-lg h-[450px] bg-white rounded-lg p-2">
-                       <div>
-                         <img class="w-full h-[190px] bg-[#EDEDED] rounded-lg" src="${plant.image}" alt="">
-                       </div>
-                        <h2 onclick="loadPlantDetail(${plant.id})" class="font-bold my-1.5">${plant.name}</h2>
-                        <div class="h-[110px]"><p class="text-[14px] mb-1.5">${plant.description}</p></div>
-                        <div class="flex justify-between">
-                           <button class="btn rounded-full bg-[#dcfce7] text-[#15803d]"> <p>${plant.category}</p></button>
-                            <p class="font-semibold">৳ <span>${plant.price}</span></p>                            
-                        </div>
-                         <button
-                        class="add-cart-btn w-full btn btn-neutral mt-2 text-white rounded-full bg-[#15803D] border-0 hover:bg-[#53a548]">Add to Cart</button>
-                    </div>
-`;
-
-        treesContainer.append(categoryTrees)
-
-        // /////////////////
-        let allCart = [];
-
-        let getAddCardBtn = document.getElementsByClassName('add-cart-btn');
-
-        for (let btn of getAddCardBtn) {
-            // console.log(btn);
-
-            btn.addEventListener('click', function () {
-                // console.log(btn);
-
-                const getPlantName = btn.parentNode.children[1].innerText;
-                const getPlantPrice = btn.parentNode.children[3].children[1].children[0].innerText;
-                console.log(getPlantName, getPlantPrice);
-
-
-                allCart.push({
-                    name: getPlantName,
-                    price: parseFloat(getPlantPrice)
-                });
-
-                const cartContainer = document.getElementById('cart-container');
-                cartContainer.innerHTML = '';
-
-                let total = 0;
-
-                allCart.forEach(cart => {
-                    total += cart.price;
-
-                    const cartItem = document.createElement('div');
-                    cartItem.innerHTML = `
-                <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
-                    <div>
-                        <p class="font-medium text-[15px] mb-1">${cart.name}</p>
-                        <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
-                    </div>
-                    <div>
-                        <img id="delete-cart" src="assets/Vector.png" class="cursor-pointer" alt="">
-                    </div>
+            <div class="shadow-lg h-[450px] bg-white rounded-lg p-2">
+                <div>
+                    <img class="w-full h-[190px] bg-[#EDEDED] rounded-lg" src="${plant.image}" alt="">
                 </div>
-            `;
-                    cartContainer.appendChild(cartItem);
-                });
-
-                document.getElementById('total-price').innerText = total;
-            });
-        }
-
-        // //////////////////////////////////
-
-
+                <h2 onclick="loadPlantDetail(${plant.id})" class="font-bold my-1.5">${plant.name}</h2>
+                <div class="h-[110px]"><p class="text-[14px] mb-1.5">${plant.description}</p></div>
+                <div class="flex justify-between">
+                    <button class="btn rounded-full bg-[#dcfce7] text-[#15803d]">
+                        <p>${plant.category}</p>
+                    </button>
+                    <p class="font-semibold">৳ <span>${plant.price}</span></p>                            
+                </div>
+                <button class="add-cart-btn w-full btn btn-neutral mt-2 text-white rounded-full bg-[#15803D] border-0 hover:bg-[#53a548]">
+                    Add to Cart
+                </button>
+            </div>
+        `;
+        treesContainer.append(categoryTrees);
     });
 
+    const getAddCardBtn = document.getElementsByClassName('add-cart-btn');
+    for (let btn of getAddCardBtn) {
+        btn.addEventListener('click', function () {
+            const getPlantName = btn.parentNode.children[1].innerText;
+            const getPlantPrice = btn.parentNode.children[3].children[1].children[0].innerText;
 
+            allCart.push({
+                name: getPlantName,
+                price: parseFloat(getPlantPrice)
+            });
 
-    manageSpinner(false)
+            renderCart();
+        });
+    }
+
+    document.getElementById('cart-container').addEventListener('click', function (e) {
+        if (e.target.classList.contains('delete-btn')) {
+            const buttons = document.getElementsByClassName('delete-btn');
+            const index = Array.from(buttons).indexOf(e.target);
+            allCart.splice(index, 1);
+            renderCart();
+        }
+    });
+
+    manageSpinner(false);
 }
+
+function renderCart() {
+    const cartContainer = document.getElementById('cart-container');
+    cartContainer.innerHTML = '';
+
+    let total = 0;
+    allCart.forEach(cart => {
+        total += cart.price;
+
+        const cartItem = document.createElement('div');
+        cartItem.innerHTML = `
+            <div class="cart bg-[#F0FDF4] h-[65px] rounded-lg w-full p-2.5 flex justify-between items-center mb-2">
+                <div>
+                    <p class="font-medium text-[15px] mb-1">${cart.name}</p>
+                    <p class="text-[15px] text-[#1f2937ab]">৳ <span>${cart.price}</span> x 1</p>
+                </div>
+                <div>
+                    <img src="assets/Vector.png" class="delete-btn cursor-pointer" alt="">
+                </div>
+            </div>
+        `;
+        cartContainer.appendChild(cartItem);
+    });
+
+    document.getElementById('total-price').innerText = total;
+}
+
 
 const manageSpinner = (status) => {
     if (status === true) {
